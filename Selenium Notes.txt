@@ -1,0 +1,23 @@
+Which Of The Id, Name, XPath, Or CSS Selector Should You Use?
+If the page has unique names or identifiers available, then we should use them.
+
+If they are not available, then go for a CSS selector as it is faster than the XPath.
+
+When none of the preferred locators is present, then you may try the XPath.
+
+What Is XPath? How Does It Work?
+XPath is the most-used locator strategies Selenium uses to find web elements.
+
+It works by navigating through the DOM elements and attributes to locate the target object. For example – a text box or a button or checkboxes.
+	
+Although it guarantees to give you the element you are looking after. But it is slower than as compared to other locators like ID, name, or CSS selectors.
+
+What Does A Single Slash “/” Mean In XPath?
+- A single (forward) slash “/” represents the absolute path.
+- In this case, the XPath engine navigates the DOM right from the first node.
+- /html/body/div/div[2]/input
+
+What Does A Double Slash “//” Mean In XPath?
+- A double (forward) Slash “//” represents the relative path.
+- In this case, the XPath engine searches for the matching element anywhere in the DOM.
+- //div//input[@id=’test’]
