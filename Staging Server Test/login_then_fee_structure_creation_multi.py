@@ -28,7 +28,7 @@ driver = webdriver.Chrome()
 print("Selenium start! Now starting time.")
 start = timer()
 
-driver.get("http://178.128.87.243/index.php")  # Replace with actual login URL
+driver.get("")  # Replace with actual login URL
 driver.maximize_window()
 #time.sleep(3)  # Wait for the page to load
 driver.implicitly_wait(3)  
