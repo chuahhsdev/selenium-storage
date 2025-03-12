@@ -7,6 +7,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
+from config import login_link #Imports Login URL. Please replace with Actual Test Server
+
 import sys
 import time
 import math
@@ -28,7 +30,7 @@ driver = webdriver.Chrome()
 print("Selenium start! Now starting time.")
 start = timer()
 
-driver.get("")  # Replace with actual login URL
+driver.get(login_link)  # Replace with actual login URL
 driver.maximize_window()
 #time.sleep(3)  # Wait for the page to load
 driver.implicitly_wait(3)  
@@ -136,9 +138,9 @@ for fee_names in fee_name:
     driver.execute_script("arguments[0].blur();", school_adjust_field)
 
     #driver.find_element(By.TAG_NAME, "body").click()
-    time.sleep(3)  # Wait for page to load
+    time.sleep(1)  # Wait for page to load
     #school_adjust_field.send_keys(str(school_default_val_adjust)) # Adjusted for 10% off on school fee
-    time.sleep(10)  # Wait for page to load
+    #time.sleep(10)  # Wait for page to load
  
     #scrolls to submit button
     submit_fee_structure_button = driver.find_element(By.CLASS_NAME, "uk-button-primary")
@@ -146,9 +148,17 @@ for fee_names in fee_name:
 
     driver.execute_script("arguments[0].scrollIntoView();", remarks_field) # Scrolls into view so Selenium can click it
     #driver.execute_script("window.scrollBy(0, -500);")  # Scroll up 500 pixels
-
+    
+    remarks_field.send_keys("Sibling Fee (Auto-input by Selenium)")
     time.sleep(2)  # Wait for page to load
     submit_fee_structure_button.click()
+    
+    try:
+        driver.switch_to.alert.accept()
+        print("alert accepted")
+    except TimeoutException:
+        print("no alert")
+    
     time.sleep(1)  # Wait for page to load
     try:
         check_error = driver.find_element(By.XPATH, "//h2[text()='Fees structure name already exist']") # Checking Fee Structure Duplication Error

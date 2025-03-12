@@ -7,6 +7,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
+from config import login_link #Imports Login URL. Please replace with Actual Test Server
+
 import sys
 import time
 import math
@@ -28,7 +30,7 @@ driver = webdriver.Chrome()
 print("Selenium start! Now starting time.")
 start = timer()
 
-driver.get("")  # Replace with actual login URL
+driver.get(login_link")  # Replace with actual login URL
 driver.maximize_window()
 #time.sleep(3)  # Wait for the page to load
 driver.implicitly_wait(3)  

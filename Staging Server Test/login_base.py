@@ -1,14 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from config import login_link #Imports Login URL. Please replace with Actual Test Server
 import time
+
 
 # Set up WebDriver (Change path if necessary)
 driver = webdriver.Chrome()
 
-#driver.get("")  # Replace with actual login URL
+driver.get(login_link)  # Replace with actual login URL
 # Step 1: Open the login page
-time.sleep(2)  # Wait for the page to load
+time.sleep(5)  # Wait for the page to load
 
 # Step 2: Locate and fill in login details
 username_field = driver.find_element(By.ID, "user_name")  # Adjust selector
