@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import time
 import math
+import os
 
 from timeit import default_timer as timer
 
@@ -40,6 +41,8 @@ hobbies_checkbox_var_3 = "Y"
 currentAddress_var = "Bandar Utama Damansara 47800"
 state_var = "Rajasthan"
 city_var = "Jaipur"
+
+file_path = "C:\\Users\\User\\Desktop\\boybosyabc.jpg"  # Use double backslashes in Windows
 
 # Functions!
 def round_time(end, start):
@@ -93,8 +96,6 @@ userNumber_field.send_keys(userNumber_var)
 # DoB Section
 dateOfBirthInput_field.click()
 
-time.sleep(2)  # Wait up to 10 seconds
-
 #month_field = Select(driver.find_element(By.XPATH, "//select[@class='react-datepicker__month-select']"))
 month_field = driver.find_element(By.XPATH, "//select[@class='react-datepicker__month-select']")
 year_field = driver.find_element(By.XPATH, "//select[@class='react-datepicker__year-select']")
@@ -111,14 +112,12 @@ time.sleep(1)  # Wait up to 10 seconds
 # select by visible text
 month_field_select.select_by_visible_text(dateOfBirthInput_var_month)
 year_field_select.select_by_visible_text(dateOfBirthInput_var_year)
-time.sleep(2)  # Wait up to 10 seconds
 
 # Wait for the date to become visible and clickable
 day_element = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'react-datepicker__day--024')]"))
 )
 day_element.click()
-time.sleep(3)  # Wait up to 10 seconds
 #for element in driver.find_elements_by_class_name('react-datepicker__day'):
 #for element in driver.find_elements(By.CLASS_NAME, "react-datepicker__day"):
 #    print(element.text)
@@ -130,34 +129,85 @@ time.sleep(3)  # Wait up to 10 seconds
 
 # Subjects
 driver.execute_script("arguments[0].scrollIntoView();", subjectsInput_field) # Scrolls into view
-print("a")
 subjectsInput_field.click();
 
-subjectsInput_field.send_keys("Computer Science")
-print("b")
+subjectsInput_field.send_keys(subjectsContainer_var)
 subjectsInput_field.send_keys(Keys.ENTER)  # Press Enter
+
+# Hobbies
+hobbies_chk_1 = driver.find_element(By.XPATH, "//label[@for='hobbies-checkbox-1']")
+hobbies_chk_2 = driver.find_element(By.XPATH, "//label[@for='hobbies-checkbox-2']")
+hobbies_chk_3 = driver.find_element(By.XPATH, "//label[@for='hobbies-checkbox-3']")
+
+if hobbies_checkbox_var_1 == "Y":
+    hobbies_chk_1.click()
+if hobbies_checkbox_var_2 == "Y":
+    hobbies_chk_2.click()
+if hobbies_checkbox_var_3 == "Y":
+    hobbies_chk_3.click()
+
+# Picture
+file_input = driver.find_element(By.ID, "uploadPicture")
+#file_input.click()
+if os.path.exists(file_path):
+    file_input.send_keys(file_path)  # This will upload the file
+else:
+    print("File not found, skipping")
+
+# Address
+currentAddress_field.send_keys(currentAddress_var)
+
 # State and City
 state_field = driver.find_element(By.ID, "state")
 state_field.click()
 option = driver.find_element(By.XPATH, f"//div[contains(text(), '{state_var}')]")
 driver.execute_script("arguments[0].click();", option)
-time.sleep(2)
 
-#city_field.selectByVisibleText(city_var);
-city_field = driver.find_element(By.ID, "city")
-print("fff")
-city_field.click()
-print("sfas")
-time.sleep(1)
-# Type it instead
-city_field.send_keys("Jaipur")
-print("asd")
-time.sleep(2)
-city_field.send_keys(Keys.ENTER)  # Delete selected text
-#option = driver.find_element(By.XPATH, f"//div[contains(text(), '{city_var}')]")
+# Click the dropdown to activate it
+city_dropdown = driver.find_element(By.ID, "city")
+city_dropdown.click()
+#time.sleep(1)  # Allow the dropdown to load
 
+# Find the actual input field and type into it
+city_input = driver.find_element(By.ID, "react-select-4-input")
+city_input.send_keys(city_var)
 
-time.sleep(10)
+# Press ENTER to select
+city_input.send_keys(Keys.ENTER)
+
+# Submit time!
+submit_btn = driver.find_element(By.ID, "submit")
+submit_btn.click()
+#time.sleep(3)
+
+# Locate the table to print the results
+table = driver.find_element("xpath", "//table[contains(@class, 'table')]")
+
+# Extract rows
+rows = table.find_elements("tag name", "tr")
+
+# Extract data!
+table_data = {}
+chkPass = "Y" #checks if all fields are populated properly
+
+for row in rows[1:]:  # Skip header row
+    cols = row.find_elements("tag name", "td")
+    if len(cols) == 2:  # Ensure row contains valid data
+        label = cols[0].text.strip()
+        value = cols[1].text.strip()
+        table_data[label] = value
+        
+        if value == "":
+            chkPass = "N"
+  
+# Print extracted data
+for key, value in table_data.items():
+    print(f"{key}: {value}")
+
+if chkPass == "N":
+    print("ERROR IN ONE OF FIELDS")
+    
+time.sleep(5)
 
 #End the current log time.
 end = timer()
